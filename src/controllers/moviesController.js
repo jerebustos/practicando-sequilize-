@@ -6,19 +6,19 @@ const Movies = db.Movie;
 
 const moviesController = {
     'list': (req, res) => {
-        db.Movie.findAll()
+        Movies.findAll()
             .then(movies => {
                 res.render('moviesList.ejs', {movies})
             })
     },
     'detail': (req, res) => {
-        db.Movie.findByPk(req.params.id)
+        Movies.findByPk(req.params.id)
             .then(movie => {
                 res.render('moviesDetail.ejs', {movie});
             });
     },
-    'new': (req, res) => {
-        db.Movie.findAll({
+    new: (req, res) => {
+        Movies.findAll({
             order : [
                 ['release_date', 'DESC']
             ],
@@ -28,8 +28,8 @@ const moviesController = {
                 res.render('newestMovies', {movies});
             });
     },
-    'recomended': (req, res) => {
-        db.Movie.findAll({
+    recomended: (req, res) => {
+        Movies.findAll({
             where: {
                 rating: {[db.Sequelize.Op.gte] : 8}
             },
@@ -40,17 +40,17 @@ const moviesController = {
             .then(movies => {
                 res.render('recommendedMovies.ejs', {movies});
             });
-    }, //Aqui debemos modificar y completar lo necesario para trabajar con el CRUD
+    }, 
     add: function (req, res) {
        return res.render("moviesAdd")
     },
     create: async function (req, res) {
-       await db.Movie.create(req.body);
+       await Movies.create(req.body);
 
        res.redirect("/movies")
     },
     edit: async function(req, res) {
-       let Movie = await db.Movie.findByPk(req.params.id);
+       let Movie = await Movies.findByPk(req.params.id);
 
        let pelicula = {
            Movie
@@ -60,15 +60,15 @@ const moviesController = {
 
     },
     update: async function (req,res) {
-        let Movie = await db.Movie.findByPk(req.params.id);
+        let Movie = await Movies.findByPk(req.params.id);
 
-        await db.Movie.update(req.body, {where : { id : Movie.id}});
+        await Movies.update(req.body, {where : { id : Movie.id}});
 
         res.redirect("/movies")
 
     },
     delete: async function (req, res) {
-        let Movie = await db.Movie.findByPk(req.params.id);
+        let Movie = await Movies.findByPk(req.params.id);
         let pelicula = {
             Movie
         }
