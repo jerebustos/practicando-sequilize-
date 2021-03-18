@@ -77,9 +77,8 @@ const moviesController = {
 
     },
     destroy: async function (req, res) {
-        let Movie = await Movies.findByPk(req.params.id);
 
-        await Movies.destroy({where : { id : Movie.id}});
+        await Movies.destroy({where : { id : req.params.id}});
 
         res.redirect("/movies")
     }
