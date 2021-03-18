@@ -28,8 +28,8 @@ const moviesController = {
                 res.render('newestMovies', {movies});
             });
     },
-    recomended: (req, res) => {
-        Movies.findAll({
+    recomended: async function(req, res){
+       let movies = await  Movies.findAll({
             where: {
                 rating: {[db.Sequelize.Op.gte] : 8}
             },
@@ -37,9 +37,8 @@ const moviesController = {
                 ['rating', 'DESC']
             ]
         })
-            .then(movies => {
-                res.render('recommendedMovies.ejs', {movies});
-            });
+              return  res.render('recommendedMovies.ejs', {movies})
+            
     }, 
     add: function (req, res) {
        return res.render("moviesAdd")
@@ -60,9 +59,8 @@ const moviesController = {
 
     },
     update: async function (req,res) {
-        let Movie = await Movies.findByPk(req.params.id);
 
-        await Movies.update(req.body, {where : { id : Movie.id}});
+        await Movies.update(req.body, {where : { id : req.params.id}});
 
         res.redirect("/movies")
 
